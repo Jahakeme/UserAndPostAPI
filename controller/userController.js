@@ -86,6 +86,31 @@ const getSingleUser = async (req, res, next) => {
     }
 }  
 
+// Update user information in the database
+const updateUser = async (req, res, next) => {
+    // Ensure user is authenticated
+    if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized. Please log in.' });
+    }
+    const {id} = req.params;
+    const updatedFields = req.body;
+    
+    // Check if the ID is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+    
+    try {
+        const user = await User.findByIdAndUpdate(id, updatedFields, {new: true});
+        if (!user) {
+            return res.status(404).json({message: 'User not found'});
+        }
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+};
+
 // Delete user from the database
 const deleteUser = async (req, res, next) => {
     // Ensure user is authenticated
