@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const userRouter = Router();
-const {signup, login, getSingleUser, deleteUser} = require('../controller/userController');
+const {signup, login, getSingleUser, updateUser, deleteUser} = require('../controller/userController');
 const authMiddleware = require('../middlewares/authMiddlware');
 
 // Routes
@@ -12,6 +12,9 @@ userRouter.post('/user/login', login);
 
 // GET /api/user/:id
 userRouter.get('/user/:id', authMiddleware, getSingleUser);
+
+// PUT /api/user/:id
+userRouter.put('/user/:id', authMiddleware, updateUser);
 
 // DELETE /api/user/:id
 userRouter.delete('/user/:id', authMiddleware, deleteUser);
